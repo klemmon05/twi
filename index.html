@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Transformation Window Intelligence | Outbound signal intelligence for services firms</title>
+  <meta name="description" content="Precision outbound intelligence for transformation and advisory firms. Evidence-backed signals, confidence scoring, and outreach-ready context on PE-owned companies entering transformation windows." />
+  <meta property="og:title" content="Transformation Window Intelligence" />
+  <meta property="og:description" content="Outbound signal intelligence for services firms targeting PE-owned companies entering transformation windows." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0b1220" />
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#0f1a2e;
+      --panel2:#0c162a;
+      --text:#e8eefc;
+      --muted:#b7c3e6;
+      --muted2:#8fa0cc;
+      --line:rgba(255,255,255,.10);
+      --brand:#7c5cff;
+      --brand2:#2fd3c8;
+      --danger:#ff4d6d;
+      --ok:#2fd3c8;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+      --radius2: 12px;
+      --max: 1100px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% -10%, rgba(124,92,255,.30), transparent 55%),
+        radial-gradient(900px 500px at 80% 0%, rgba(47,211,200,.18), transparent 55%),
+        radial-gradient(800px 600px at 30% 110%, rgba(124,92,255,.12), transparent 55%),
+        var(--bg);
+      line-height:1.55;
+    }
+    a{color:inherit}
+    .wrap{max-width:var(--max); margin:0 auto; padding:24px}
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(11,18,32,.72);
+      border-bottom:1px solid var(--line);
+    }
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:16px;
+      padding:14px 24px;
+      max-width:var(--max); margin:0 auto;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      text-decoration:none;
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+    .logo{
+      width:34px; height:34px; border-radius:10px;
+      background:
+        linear-gradient(135deg, rgba(124,92,255,1), rgba(47,211,200,1));
+      box-shadow: 0 10px 25px rgba(124,92,255,.25);
+    }
+    .navlinks{
+      display:flex; gap:18px; align-items:center; flex-wrap:wrap;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .navlinks a{
+      text-decoration:none;
+      opacity:.9;
+    }
+    .navlinks a:hover{opacity:1; color:var(--text)}
+    .cta{
+      display:flex; gap:10px; align-items:center;
+    }
+    .btn{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius:12px;
+      font-weight:600;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-flex; align-items:center; gap:10px;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.06)}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(124,92,255,.95), rgba(47,211,200,.70));
+      border-color: rgba(255,255,255,.18);
+      box-shadow: 0 18px 45px rgba(124,92,255,.22);
+    }
+    .btn.primary:hover{background: linear-gradient(135deg, rgba(124,92,255,1), rgba(47,211,200,.78))}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color:var(--muted);
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:600;
+      letter-spacing:.2px;
+    }
+    .pill .dot{
+      width:8px; height:8px; border-radius:999px;
+      background: var(--brand2);
+      box-shadow: 0 0 0 4px rgba(47,211,200,.12);
+    }
+
+    /* Hero */
+    .hero{
+      padding:54px 0 26px;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:26px;
+      align-items:start;
+    }
+    @media (max-width: 920px){
+      .hero-grid{grid-template-columns:1fr; }
+      .navlinks{display:none;}
+    }
+    h1{
+      font-size:48px;
+      line-height:1.05;
+      margin:14px 0 14px;
+      letter-spacing:-.6px;
+    }
+    @media (max-width: 520px){ h1{font-size:38px;} }
+    .sub{
+      font-size:18px;
+      color:var(--muted);
+      max-width: 58ch;
+    }
+    .hero-actions{
+      display:flex; gap:12px; align-items:center; flex-wrap:wrap;
+      margin-top:18px;
+    }
+    .fineprint{
+      margin-top:12px;
+      font-size:12px;
+      color:var(--muted2);
+      max-width: 70ch;
+    }
+
+    /* Panels */
+    .panel{
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .panel .hd{
+      padding:16px 16px 10px;
+      border-bottom:1px solid var(--line);
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      background: rgba(255,255,255,.03);
+    }
+    .panel .hd .title{
+      font-weight:800; letter-spacing:.2px;
+      font-size:14px;
+      color:var(--text);
+      display:flex; align-items:center; gap:10px;
+    }
+    .panel .hd .title .tag{
+      font-family:var(--mono);
+      font-size:11px;
+      color:rgba(255,255,255,.80);
+      background: rgba(124,92,255,.15);
+      border:1px solid rgba(124,92,255,.25);
+      padding:3px 8px;
+      border-radius:999px;
+    }
+    .panel .bd{padding:16px;}
+    .mini{
+      font-size:13px; color:var(--muted);
+    }
+
+    /* Sample card */
+    .sample{
+      display:grid; gap:12px;
+    }
+    .card{
+      border:1px solid var(--line);
+      background: rgba(11,18,32,.35);
+      border-radius: var(--radius2);
+      padding:14px;
+    }
+    .row{
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      align-items:flex-start;
+    }
+    .k{
+      font-size:12px; color:var(--muted2);
+    }
+    .v{
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+    .badges{
+      display:flex; gap:8px; flex-wrap:wrap;
+    }
+    .badge{
+      font-size:11px;
+      font-weight:700;
+      padding:5px 8px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.88);
+    }
+    .badge.ok{border-color: rgba(47,211,200,.35); background: rgba(47,211,200,.10);}
+    .badge.warn{border-color: rgba(124,92,255,.35); background: rgba(124,92,255,.12);}
+    .badge.noise{border-color: rgba(255,255,255,.12); color:var(--muted);}
+    .evidence{
+      margin-top:10px;
+      padding-top:10px;
+      border-top:1px dashed rgba(255,255,255,.14);
+      color:var(--muted);
+      font-size:13px;
+    }
+    .evidence ul{margin:8px 0 0 18px; padding:0;}
+    .evidence li{margin:6px 0;}
+    .guidance{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius: 12px;
+      border:1px solid rgba(47,211,200,.25);
+      background: rgba(47,211,200,.08);
+      font-size:13px;
+      color: rgba(232,238,252,.95);
+    }
+    .guidance b{color:#ffffff}
+
+    /* Sections */
+    .section{padding:44px 0;}
+    .section h2{
+      margin:0 0 10px;
+      font-size:30px;
+      letter-spacing:-.3px;
+    }
+    .section p{margin:0; color:var(--muted); max-width: 78ch;}
+    .grid3{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+    }
+    @media (max-width: 900px){ .grid3{grid-template-columns:1fr;} }
+    .feature{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      padding:16px;
+      background: rgba(255,255,255,.03);
+    }
+    .feature .icon{
+      width:38px; height:38px; border-radius: 14px;
+      background: rgba(124,92,255,.14);
+      border:1px solid rgba(124,92,255,.22);
+      display:flex; align-items:center; justify-content:center;
+      margin-bottom:10px;
+      font-family:var(--mono);
+      color:rgba(255,255,255,.92);
+      font-weight:800;
+    }
+    .feature h3{margin:0 0 6px; font-size:16px;}
+    .feature p{margin:0; font-size:13px; color:var(--muted);}
+
+    /* Pricing */
+    .pricing{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:14px;
+      margin-top:18px;
+      align-items:stretch;
+    }
+    @media (max-width: 900px){ .pricing{grid-template-columns:1fr;} }
+    .pricebox{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      padding:18px;
+      background: rgba(255,255,255,.03);
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .pricebox.featured{
+      background: linear-gradient(180deg, rgba(124,92,255,.16), rgba(47,211,200,.06));
+      border-color: rgba(124,92,255,.28);
+      box-shadow: 0 18px 55px rgba(124,92,255,.18);
+    }
+    .pricebox .label{font-weight:800; letter-spacing:.2px;}
+    .price{
+      display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+    }
+    .price .amt{font-size:34px; font-weight:900; letter-spacing:-.4px;}
+    .price .per{color:var(--muted);}
+    .list{
+      margin:0; padding-left:18px;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .list li{margin:8px 0;}
+    .smallnote{font-size:12px; color:var(--muted2);}
+
+    /* FAQ */
+    details{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.03);
+      padding:14px 16px;
+    }
+    details + details{margin-top:12px;}
+    summary{
+      cursor:pointer;
+      font-weight:800;
+      list-style:none;
+    }
+    summary::-webkit-details-marker{display:none;}
+    .answer{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:13px;
+      max-width: 92ch;
+    }
+
+    /* Footer */
+    .footer{
+      border-top:1px solid var(--line);
+      padding:26px 0 44px;
+      color:var(--muted2);
+      font-size:12px;
+    }
+    .footer a{color:var(--muted); text-decoration:none}
+    .footer a:hover{color:var(--text)}
+    .footergrid{
+      display:flex; justify-content:space-between; align-items:flex-start; gap:16px;
+      flex-wrap:wrap;
+    }
+
+    /* Forms */
+    form{
+      display:grid; gap:10px;
+      margin-top:10px;
+    }
+    .field{
+      display:grid; gap:6px;
+    }
+    label{font-size:12px; color:var(--muted2); font-weight:700;}
+    input, textarea, select{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background: rgba(11,18,32,.45);
+      color:var(--text);
+      outline:none;
+      font-family:var(--sans);
+    }
+    textarea{min-height: 92px; resize: vertical;}
+    input:focus, textarea:focus, select:focus{
+      border-color: rgba(124,92,255,.55);
+      box-shadow: 0 0 0 4px rgba(124,92,255,.15);
+    }
+    .formrow{
+      display:grid; grid-template-columns: 1fr 1fr; gap:10px;
+    }
+    @media (max-width: 680px){ .formrow{grid-template-columns:1fr;} }
+    .note{
+      font-size:12px; color:var(--muted2);
+      margin-top:8px;
+    }
+    .kbd{
+      font-family:var(--mono);
+      font-size:11px;
+      padding:2px 6px;
+      border:1px solid rgba(255,255,255,.15);
+      border-bottom-color: rgba(255,255,255,.08);
+      border-radius:8px;
+      background: rgba(255,255,255,.05);
+      color: rgba(255,255,255,.88);
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="nav">
+      <a class="brand" href="#top" aria-label="Transformation Window Intelligence">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <div style="font-size:14px; font-weight:900;">Transformation Window Intelligence</div>
+          <div style="font-size:11px; color:var(--muted2); font-weight:700;">Outbound signal intelligence for services firms</div>
+        </div>
+      </a>
+      <nav class="navlinks" aria-label="Primary">
+        <a href="#how">How it works</a>
+        <a href="#deliverables">Deliverables</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="cta">
+        <a class="btn" href="#deliverables" aria-label="View sample output">View sample</a>
+        <a class="btn primary" href="#contact" aria-label="Request a pilot">
+          Request a pilot <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" class="wrap">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <span class="pill"><span class="dot" aria-hidden="true"></span> Precision over volume. False positives treated as failures.</span>
+          <h1>Know <span style="color:var(--brand2)">when</span> to reach out—before the market does.</h1>
+          <p class="sub">
+            We deliver evidence-backed, confidence-scored signals on <b>PE-owned</b> companies entering
+            transformation windows—packaged as <b>outreach-ready intelligence</b> for consulting,
+            interim management, and special situations advisory firms.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#contact">Request a 30-day pilot →</a>
+            <a class="btn" href="#how">See how it works</a>
+          </div>
+          <p class="fineprint">
+            Not a lead list. Not a news alert. No speculation. Each item includes verifiable evidence, signal taxonomy,
+            and outreach framing designed for operator-grade conversations.
+          </p>
+        </div>
+
+        <!-- Right: Sample Preview -->
+        <aside class="panel" aria-label="Sample signal card">
+          <div class="hd">
+            <div class="title">Sample Signal <span class="tag">OUTBOUND-READY</span></div>
+            <span class="pill" title="Confidence score">Confidence <span class="kbd">4/5</span></span>
+          </div>
+          <div class="bd sample">
+            <div class="card">
+              <div class="row">
+                <div>
+                  <div class="k">Portfolio company</div>
+                  <div class="v">Momentec Brands</div>
+                </div>
+                <div style="text-align:right">
+                  <div class="k">Sponsor</div>
+                  <div class="v">Platinum Equity</div>
+                </div>
+              </div>
+
+              <div style="margin-top:10px" class="badges">
+                <span class="badge ok">Structural Trigger</span>
+                <span class="badge warn">Leadership Change</span>
+                <span class="badge noise">Integration / Ops shift</span>
+              </div>
+
+              <div class="evidence">
+                <div class="k" style="font-weight:800; color:var(--muted);">Evidence (public, verifiable)</div>
+                <ul>
+                  <li>CEO transition announced; former CEO moves to vice chairman role.</li>
+                  <li>Distribution consolidation into a large automated customer success center.</li>
+                  <li>Management team build-out referenced alongside consolidation execution.</li>
+                </ul>
+              </div>
+
+              <div class="guidance">
+                <b>Outbound angle:</b> Integration + operating-model reset creates a 3–6 month execution window.
+                High receptivity for <b>PMO</b>, <b>supply chain</b>, and <b>systems/process harmonization</b>.
+              </div>
+            </div>
+
+            <div class="mini">
+              Every signal includes: ownership verification, taxonomy classification, confidence scoring, and
+              “merits outreach” guidance—so your team can prioritize calls that actually convert.
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- TRUST / WHO IT'S FOR -->
+    <section class="section" id="who">
+      <h2>Built for firms that live and die by timing</h2>
+      <p>
+        Transformation Window Intelligence is designed for services firms targeting PE-owned assets where timing matters:
+        transformation consultancies, interim leadership providers, value-creation specialists, and special situations advisors.
+      </p>
+
+      <div class="grid3" style="margin-top:18px">
+        <div class="feature">
+          <div class="icon">01</div>
+          <h3>Transformation & Ops Consultancies</h3>
+          <p>Find accounts entering execution windows—before PMOs are public and before RFPs leak.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">02</div>
+          <h3>Interim & Executive Search</h3>
+          <p>Surface early role signals (integration, turnaround FP&A, transformation leads) to win mandates sooner.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">03</div>
+          <h3>Special Situations Advisors</h3>
+          <p>Identify credible structural events (carve-outs, strategic reviews) requiring rapid operational readiness.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section" id="how">
+      <h2>How it works</h2>
+      <p>
+        We run a disciplined, multi-pass scan of public sources and sponsor communications—then apply an
+        operator-grade taxonomy to filter noise and surface only outreach-worthy signals.
+      </p>
+
+      <div class="grid3">
+        <div class="feature">
+          <div class="icon">A</div>
+          <h3>Multi-pass discovery</h3>
+          <p>General news, sponsor-centric scanning, sector/trade press, plus “quiet” early indicators.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">B</div>
+          <h3>Ownership verification</h3>
+          <p>We confirm PE ownership before an item qualifies—no unverifiable companies enter the feed.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">C</div>
+          <h3>Evidence + confidence</h3>
+          <p>Each signal includes verifiable evidence and a confidence score. No inference beyond the source.</p>
+        </div>
+      </div>
+
+      <div class="grid3">
+        <div class="feature">
+          <div class="icon">D</div>
+          <h3>Taxonomy classification</h3>
+          <p>Structural triggers vs early intervention signals, with a single primary trigger category per item.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">E</div>
+          <h3>Outreach framing</h3>
+          <p>We translate signals into a first-call angle: why now, what’s changing, and what to lead with.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">F</div>
+          <h3>Exclusivity options</h3>
+          <p>Sponsor- or sector-level exclusivity available to protect your outbound advantage.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DELIVERABLES -->
+    <section class="section" id="deliverables">
+      <h2>What you get</h2>
+      <p>
+        Designed for immediate use by BD and partner teams—delivered in the formats people actually open.
+      </p>
+
+      <div class="pricing" style="margin-top:18px">
+        <div class="pricebox">
+          <div class="label">Weekly Outbound Intelligence Pack</div>
+          <div class="smallnote">PDF + spreadsheet. Optional Slack/email summary.</div>
+          <ul class="list">
+            <li><b>Curated signal feed</b> (PE-owned only) with ownership verification</li>
+            <li><b>Signal taxonomy</b> (Structural vs Early) + primary trigger category</li>
+            <li><b>Evidence bullets</b> (quotes or tightly worded paraphrases)</li>
+            <li><b>Confidence scoring</b> (1–5) with justification tied to evidence</li>
+            <li><b>Merits outreach</b> flag + outreach reasoning</li>
+          </ul>
+        </div>
+
+        <div class="pricebox featured">
+          <div class="label">Outreach-Ready Add-On</div>
+          <div class="smallnote">Turn intelligence into emails, call angles, and account briefs.</div>
+          <ul class="list">
+            <li><b>First-call talk track</b> and outreach angle per signal</li>
+            <li><b>Who to approach</b> guidance (role/function hypotheses, non-contact)</li>
+            <li><b>Account brief</b> (1-page) for top opportunities</li>
+            <li><b>Exclusion discipline</b>: we explicitly drop routine hiring and weak items</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:16px">
+        <div class="hd">
+          <div class="title">Signal Types We Track <span class="tag">TAXONOMY</span></div>
+        </div>
+        <div class="bd mini">
+          <div class="grid3" style="margin-top:0">
+            <div class="feature" style="background:rgba(255,255,255,.02)">
+              <h3 style="margin-top:0">Structural Transformation Triggers</h3>
+              <p>Leadership changes, strategic alternatives, carve-outs/divestitures, restructuring language, governance shifts.</p>
+            </div>
+            <div class="feature" style="background:rgba(255,255,255,.02)">
+              <h3 style="margin-top:0">Early Intervention / Quiet Signals</h3>
+              <p>Transformation infrastructure build-outs, non-routine functional roles, sponsor operating intervention signals.</p>
+            </div>
+            <div class="feature" style="background:rgba(255,255,255,.02)">
+              <h3 style="margin-top:0">Strict Exclusions</h3>
+              <p>Generic growth hiring, routine backfills, vague keywords without evidence, and unverifiable PE ownership.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="section" id="pricing">
+      <h2>Pricing</h2>
+      <p>
+        Pricing is aligned to ROI (one well-timed mandate pays for the service many times over).
+        Plans are scoped by coverage, frequency, and exclusivity.
+      </p>
+
+      <div class="pricing">
+        <div class="pricebox">
+          <div class="label">Standard</div>
+          <div class="price">
+            <div class="amt">$20k–$40k</div>
+            <div class="per">/ year</div>
+          </div>
+          <ul class="list">
+            <li>Weekly signal pack</li>
+            <li>Sector focus or sponsor focus</li>
+            <li>Evidence + confidence scoring</li>
+            <li>Email delivery + archive</li>
+          </ul>
+          <div class="smallnote">Best for: boutiques, focused BD teams, 1–2 sectors.</div>
+        </div>
+
+        <div class="pricebox featured">
+          <div class="label">Exclusive</div>
+          <div class="price">
+            <div class="amt">Custom</div>
+            <div class="per">(limited availability)</div>
+          </div>
+          <ul class="list">
+            <li>Sponsor-level or sector-level exclusivity</li>
+            <li>Higher frequency (2×/week or daily)</li>
+            <li>Outreach-ready add-on (talk tracks + 1-pagers)</li>
+            <li>Prior coverage guardrails (custom)</li>
+          </ul>
+          <div class="smallnote">Best for: firms that want a durable outbound edge.</div>
+        </div>
+      </div>
+
+      <p class="note">
+        Want to start smaller? Ask for a <span class="kbd">30-day pilot</span> with a narrow sponsor/sector scope.
+      </p>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+      <h2>FAQ</h2>
+      <p>Common questions from BD leaders and managing partners.</p>
+
+      <div style="margin-top:18px">
+        <details>
+          <summary>Is this just a news alert or lead list?</summary>
+          <div class="answer">
+            No. We only include items with verifiable PE ownership and a clearly articulated signal under a strict taxonomy.
+            Each item includes evidence, a confidence score, and outreach framing (why now / what angle).
+          </div>
+        </details>
+
+        <details>
+          <summary>How do you avoid false positives?</summary>
+          <div class="answer">
+            We treat false positives as worse than misses. Routine hiring, vague keyword matches, growth announcements, and unverifiable ownership
+            are excluded. Signals must contain explicit contextual indicators beyond generic mentions.
+          </div>
+        </details>
+
+        <details>
+          <summary>Do you provide contact information?</summary>
+          <div class="answer">
+            No. We provide outreach-ready intelligence and role-based guidance (e.g., CFO, Head of Transformation, Ops Lead) where relevant—without selling personal data.
+          </div>
+        </details>
+
+        <details>
+          <summary>Can you tailor coverage to our niche?</summary>
+          <div class="answer">
+            Yes. We can scope by sponsor set, sector, geography, and trigger focus (e.g., carve-outs, integration, leadership change, PMO build-out).
+          </div>
+        </details>
+
+        <details>
+          <summary>Do you infer distress or predict outcomes?</summary>
+          <div class="answer">
+            No. We surface publicly observable signals, cite evidence, and score confidence strictly from sources.
+            We do not diagnose distress, predict outcomes, or infer sponsor intent.
+          </div>
+        </details>
+
+        <details>
+          <summary>What does “exclusivity” mean?</summary>
+          <div class="answer">
+            Exclusivity can be structured at the sponsor level (e.g., exclusive coverage for a specific PE firm) or sector level (e.g., one buyer per vertical),
+            ensuring your outbound advantage isn’t diluted.
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section" id="contact">
+      <h2>Request a pilot</h2>
+      <p>
+        Tell us your focus (sectors, sponsors, geography) and we’ll propose a 30-day pilot scope. You’ll receive a sample pack in the same format
+        you’ll get weekly.
+      </p>
+
+      <div class="pricing" style="margin-top:18px">
+        <div class="pricebox featured">
+          <div class="label">Pilot request</div>
+
+          <!-- NOTE: This form is static HTML. Replace action with your form handler (e.g., Formspree, HubSpot, etc.) -->
+          <form action="#" method="post" onsubmit="return false;">
+            <div class="formrow">
+              <div class="field">
+                <label for="name">Name</label>
+                <input id="name" name="name" type="text" placeholder="Your name" autocomplete="name" />
+              </div>
+              <div class="field">
+                <label for="email">Work email</label>
+                <input id="email" name="email" type="email" placeholder="name@company.com" autocomplete="email" />
+              </div>
+            </div>
+
+            <div class="formrow">
+              <div class="field">
+                <label for="firm">Firm</label>
+                <input id="firm" name="firm" type="text" placeholder="Your firm name" />
+              </div>
+              <div class="field">
+                <label for="role">Role</label>
+                <input id="role" name="role" type="text" placeholder="Partner / BD Lead / Principal" />
+              </div>
+            </div>
+
+            <div class="formrow">
+              <div class="field">
+                <label for="coverage">Preferred coverage</label>
+                <select id="coverage" name="coverage">
+                  <option value="weekly">Weekly</option>
+                  <option value="twice">2× / week</option>
+                  <option value="daily">Daily</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="exclusivity">Exclusivity interest</label>
+                <select id="exclusivity" name="exclusivity">
+                  <option value="none">No</option>
+                  <option value="maybe">Maybe / Discuss</option>
+                  <option value="yes">Yes (sponsor or sector)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="notes">Sponsors / sectors you care about</label>
+              <textarea id="notes" name="notes" placeholder="Example: industrials + healthcare; sponsors: Platinum, Clearlake, Audax. Focus on carve-outs and integration."></textarea>
+            </div>
+
+            <a class="btn primary" href="#" onclick="alert('This is a static demo form. Connect this button to your form handler (Formspree/HubSpot/etc.).');">
+              Send pilot request →
+            </a>
+
+            <div class="note">
+              Prefer email? Send a note to <span class="kbd">hello@yourdomain.com</span> (replace with your address).
+              <br/>We respond within 1–2 business days with a scoped pilot proposal.
+            </div>
+          </form>
+        </div>
+
+        <div class="pricebox">
+          <div class="label">What happens next</div>
+          <ul class="list">
+            <li>We confirm your target sectors/sponsors and any conflict guardrails.</li>
+            <li>We propose a 30-day pilot scope and delivery cadence.</li>
+            <li>You receive weekly packs and a short debrief on what converted best.</li>
+            <li>If it works, we lock an annual plan (optionally exclusive).</li>
+          </ul>
+          <div class="smallnote">
+            Tip: Start narrow (one sector + 5–10 sponsors). Expand once you see consistent outbound lift.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footergrid">
+        <div>
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+            <div class="logo" style="width:28px; height:28px; border-radius:10px;"></div>
+            <div style="font-weight:900;">Transformation Window Intelligence</div>
+          </div>
+          <div>
+            Evidence-backed signals on PE-owned companies entering transformation windows—built for outbound teams that value precision.
+          </div>
+        </div>
+        <div>
+          <div style="font-weight:800; margin-bottom:8px; color:var(--text)">Links</div>
+          <div style="display:grid; gap:6px">
+            <a href="#how">How it works</a>
+            <a href="#deliverables">Deliverables</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#contact">Request a pilot</a>
+          </div>
+        </div>
+        <div style="max-width: 520px;">
+          <div style="font-weight:800; margin-bottom:8px; color:var(--text)">Disclosure</div>
+          <div>
+            This service surfaces publicly observable signals and provides evidence-based commentary.
+            We do not infer distress, predict outcomes, or assert sponsor intent. We do not sell personal contact data.
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:18px; border-top:1px solid var(--line); padding-top:14px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+        <div>© <span id="year"></span> Transformation Window Intelligence. All rights reserved.</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <a href="#" onclick="alert('Add your Privacy Policy URL here.'); return false;">Privacy</a>
+          <a href="#" onclick="alert('Add your Terms of Service URL here.'); return false;">Terms</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Optional: smooth scroll for in-page anchors
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const targetId = a.getAttribute('href');
+        if (!targetId || targetId === "#") return;
+        const el = document.querySelector(targetId);
+        if (!el) return;
+        e.preventDefault();
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+  </script>
+</body>
+</html>
