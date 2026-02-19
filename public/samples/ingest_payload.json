@@ -1,0 +1,32 @@
+{
+  "report": {
+    "report_date": "2026-02-18",
+    "title": "Daily Private Equity Transformation Trigger Report — 2026-02-18",
+    "overview_summary": "Sample report for API ingestion.",
+    "narrative_body": "## Summary\nAcme Corp modernized ERP and opened an AI center.",
+    "tags": ["daily", "transformation"]
+  },
+  "signals": [
+    {
+      "company_name": "Acme Corp",
+      "sponsor": "KKR",
+      "sector": "Industrial",
+      "geography": "North America",
+      "signal_type": "Structural Trigger",
+      "confidence": "High",
+      "signal_summary": "Leadership launched a modernization program tied to margin expansion.",
+      "evidence_bullets": ["ERP migration announced", "Transformation office stood up"],
+      "sources": [
+        {
+          "title": "Acme announces transformation",
+          "publisher": "PressWire",
+          "url": "https://example.com/acme",
+          "date": "2026-02-18",
+          "quote": "We are accelerating operating model redesign."
+        }
+      ],
+      "people_mentioned": ["Jane Doe"],
+      "keywords": ["ERP", "margin", "operating model"]
+    }
+  ]
+}

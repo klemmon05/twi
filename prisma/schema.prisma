@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SignalType {
+  STRUCTURAL_TRIGGER
+  QUIET_SIGNAL
+}
+
+enum Confidence {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+model Report {
+  id              String   @id @default(cuid())
+  reportDate      DateTime @unique
+  title           String
+  overviewSummary String
+  narrativeBody   String
+  tags            String[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  signals         Signal[]
+}
+
+model Signal {
+  id              String      @id @default(cuid())
+  reportId        String
+  companyName     String
+  sponsor         String
+  sector          String
+  geography       String?
+  signalType      SignalType
+  confidence      Confidence
+  signalSummary   String
+  evidenceBullets String[]
+  peopleMentioned String[]
+  keywords        String[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  report          Report      @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  sources         Source[]
+
+  @@index([reportId])
+  @@index([sponsor])
+  @@index([sector])
+}
+
+model Source {
+  id        String   @id @default(cuid())
+  signalId   String
+  title      String
+  publisher  String
+  url        String
+  date       DateTime
+  quote      String?
+  createdAt  DateTime @default(now())
+  signal     Signal   @relation(fields: [signalId], references: [id], onDelete: Cascade)
+}
