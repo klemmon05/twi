@@ -14,6 +14,21 @@ export type SignalFilters = {
   pageSize?: number;
 };
 
+const SIGNAL_TYPES = ["STRUCTURAL_TRIGGER", "QUIET_SIGNAL"] as const;
+const CONFIDENCE_LEVELS = ["HIGH", "MEDIUM", "LOW"] as const;
+
+function parsePositiveInt(value: number | undefined, fallback: number) {
+  if (!Number.isFinite(value)) return fallback;
+  const normalized = Math.floor(Number(value));
+  return normalized > 0 ? normalized : fallback;
+}
+
+function parseDate(value?: string) {
+  if (!value) return null;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
 export async function getLatestReport() {
   return prisma.report.findFirst({
     orderBy: { reportDate: "desc" },
@@ -33,17 +48,23 @@ export async function getReport(id: string) {
 }
 
 export async function searchSignals(filters: SignalFilters) {
-  const page = filters.page ?? 1;
-  const pageSize = filters.pageSize ?? 20;
-  const from = filters.from ? new Date(filters.from) : subDays(new Date(), 30);
-  const to = filters.to ? new Date(filters.to) : new Date();
+  const page = parsePositiveInt(filters.page, 1);
+  const pageSize = parsePositiveInt(filters.pageSize, 20);
+  const from = parseDate(filters.from) ?? subDays(new Date(), 30);
+  const to = parseDate(filters.to) ?? new Date();
+  const signalType = SIGNAL_TYPES.includes(filters.signalType as (typeof SIGNAL_TYPES)[number])
+    ? filters.signalType
+    : undefined;
+  const confidence = CONFIDENCE_LEVELS.includes(filters.confidence as (typeof CONFIDENCE_LEVELS)[number])
+    ? filters.confidence
+    : undefined;
 
   const where: Record<string, unknown> = {
     report: { reportDate: { gte: from, lte: to } },
     sponsor: filters.sponsor || undefined,
     sector: filters.sector || undefined,
-    signalType: filters.signalType,
-    confidence: filters.confidence,
+    signalType,
+    confidence,
     geography: filters.geography || undefined,
     ...(filters.q
       ? {
