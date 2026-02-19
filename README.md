@@ -114,6 +114,18 @@ Sample payload: `/samples/ingest_payload.json`
    npx prisma migrate deploy
    ```
 
+## Deployment troubleshooting
+
+- If Vercel shows `Can't reach database server at postgres.postgresql:5432`, your `DATABASE_URL` is malformed.
+  - Use the exact Supabase URI format: `postgresql://postgres:<PASSWORD>@db.<project-ref>.supabase.co:5432/postgres`.
+  - Do not use placeholders like `[YOUR-PASSWORD]`.
+- If credentials fail, reset DB password in Supabase and paste the full, updated URI into Vercel (Production env).
+- If Vercel shows `Authentication failed ... credentials for postgres are not valid`, your DB password in `DATABASE_URL` is wrong or stale. Reset the password in Supabase and paste the newly generated URI into Vercel Production env vars.
+- Re-run deploy after every env var change, then run:
+  ```bash
+  npx prisma migrate deploy
+  ```
+
 ## File tree (key files)
 
 ```text
